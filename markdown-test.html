@@ -1,0 +1,205 @@
+<!doctype html>
+<html>
+<body>
+   <mark-down>
+# Our Markdown
+
+These contents should get converted
+
+* One
+* Two
+* Three
+   </mark-down>
+
+   <mark-down>
+## Also Markdown
+
+These contents are not the same as the first
+   </mark-down>
+
+   <img-figure src="https://c.pxhere.com/images/12/30/5e283733ff3cd2bd18d7cc13f40a-1435525.jpg!d"
+                 author="Name of Person"
+                 link="http://denislabrecque.ca"
+                 >
+      These contents are the caption that will live <i>inside</i> the element.
+   </img-figure>
+
+
+   <!-- Converts markdown to HTML -->
+   <script src="showdown-2.0.0.js"></script>
+   <script>
+      customElements.define('mark-down',
+         class extends HTMLElement {
+            connectedCallback() {
+               let markdown = this.innerHTML
+               let converter = new showdown.Converter()
+               let html = converter.makeHtml(markdown)
+               this.innerHTML = html
+            }
+         }
+      )
+   </script>
+
+
+   <!-- IMAGE FIGURE
+      @src = the URL to the image
+      @author = plain-text name of the person who took the photo
+      @link = URL to the author of the photo
+      The inner HTML of this element becomes the caption.
+      -->
+   <!-- Passes an image's information and automatically populates the ALT tag and figure -->
+   <template id="img-figure">
+      <link rel="stylesheet" href="dialog-polyfill.css" />
+      <style>
+         figure {
+            margin: 0 0 0 0;
+            display: inline-block; /* Stays same width as image contents */
+            background-color: whitesmoke;
+         }
+
+         img {
+            max-width: 100%; /* Images should fit within their container by default */
+            height: auto;
+            background-color: lightgrey;
+            margin: auto;
+         }
+
+         picture.modal {
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: rgba(0,0,0,0.1);
+            height: 100vh;
+            width: 100vw;
+            margin: 0 0;
+         }
+         picture.modal img {
+            animation-duration: 1s;
+            animation-name: slidein;
+         }
+
+         /*@keyframes slidein {
+            0% {
+               width: 100px;
+               margin-top: 100px;
+               margin-left: 200px;
+            }
+            100% {
+               width: 100%;
+               margin-top: 300px;
+               margin-left: 0;
+            }
+         }*/
+
+         figcaption {
+            padding: 8px; /* Matches default page margin for Chrome/Edge */
+         }
+      </style>
+      <figure>
+         <picture>
+            <img loading="auto" />
+         </picture>
+         <figcaption>
+            <header></header>
+            <footer><a></a></footer>
+         </figcaption>
+      </figure>
+   </template>
+   <script src="URI-1.19.2.js"></script>
+   <script src="dialog-polyfill.js"></script>
+   <script>
+      customElements.define('img-figure',
+         class extends HTMLElement {
+            constructor() {
+               super();
+               let shadow = this.attachShadow({ mode: 'open' })
+               let template = document.querySelector('#img-figure')
+               shadow.appendChild(template.content.cloneNode(true))
+            }
+            connectedCallback() {
+               setTimeout(() => {
+                  const shadow = this.shadowRoot
+
+                  // Set the image source, alternate text, and caption
+                  shadow.querySelector('img').setAttribute('src', this.getAttribute('src'))
+                  shadow.querySelector('img').setAttribute('alt', fileName(this.getAttribute('src')).prettyFileName())
+                  shadow.querySelector('figcaption header').innerHTML = this.innerHTML
+                  
+                  // If there's a link, the author's name gets linked; if not, just put the author's name
+                  if (this.getAttribute('link')) {
+                     console.log(shadow)
+                     shadow.querySelector('a').setAttribute('href', this.getAttribute('link'))
+                     shadow.querySelector('a').innerHTML = this.getAttribute('author')
+                  } else {
+                     shadow.querySelector('footer').innerHTML = this.getAttribute('author')
+                  }
+
+                  const duration = 1000
+                  if (this.getAttribute('modal') == 'false') {
+                     // Remove modal dialogue TODO
+                  } else {
+                     // Dialog click event
+                     shadow.querySelector('picture').onclick = function () {
+                        // Get the position of elements for animation
+                        let rect = shadow.querySelector('img').getBoundingClientRect()
+
+                        // Set the animation on the image so that it moves smoothly from its position outwards
+                        shadow.querySelector('img').animate([
+                           {
+                              width: rect.width + 'px',
+                              maxWidth: '100%',
+                              marginTop: rect.top + 'px',
+                              marginLeft: rect.left + 'px',
+                              marginRight: rect.right + 'px',
+                              marginBottom: 'auto'
+                           },
+                           {
+                              marginTop: 'auto',
+                              marginBottom: 'auto',
+                              marginLeft: 'auto',
+                              marginRight: 'auto',
+                              width: '100%',
+                              maxWidth: '100%'
+                           }
+                        ],
+                           {
+                              duration: duration
+                           })
+
+                        // Toggle the modal
+                        shadow.querySelector('picture').classList.toggle('modal')
+                     }
+                  }
+               })
+            }
+         }
+      )
+
+      // Find the file name of a document from its URL
+      function fileName(url) {
+         if (url === null || typeof url === 'undefined')
+            return ''
+         let file = new URI(url).filename() // File name with file extension
+         return file.substring(0, file.lastIndexOf('.')) // Remove the extension
+      }
+
+      // Replace underscores and dots in a file name with space characters, and capitalize
+      String.prototype.prettyFileName = function () {
+         return this.split(/[._-]/).join(' ').capitalize()
+      }
+
+      String.prototype.capitalize = function () {
+         return this.charAt(0).toUpperCase() + this.slice(1)
+      }
+
+      function test(description, input, expected) {
+         let result = fileName(input)
+         let pass = 'FAIL'
+         if (result === expected)
+            pass = 'PASS'
+         console.log(pass + ': ' + description + ': ' + input)
+         console.log('  =>  "' + fileName(input) + '"')
+      }
+   </script>
+</body>
+</html>
