@@ -1,0 +1,185 @@
+<img-figure src="https://c.pxhere.com/images/12/30/5e283733ff3cd2bd18d7cc13f40a-1435525.jpg!d"
+            author="Name of Person"
+            link="http://denislabrecque.ca">
+   Attempting to make the best <i>image-figure</i> possible.
+</img-figure>
+
+
+<!-- IMAGE FIGURE
+   @src = the URL to the image
+   @author = plain-text name of the person who took the photo
+   @link = URL to the author of the photo
+   The inner HTML of this element becomes the caption.
+   -->
+<!-- Passes an image's information and automatically populates the ALT tag and figure -->
+<template id="img-figure">
+   <link rel="stylesheet" href="dialog-polyfill.css" />
+   <style>
+      figure {
+         margin: 0 0 0 0;
+         display: inline-block; /* Stays same width as image contents */
+         background-color: whitesmoke;
+      }
+
+      img {
+         max-width: 100%; /* Images should fit within their container by default */
+         height: auto;
+         background-color: lightgrey;
+         margin: auto;
+         transition: transform 0.3s;
+      }
+
+      .zoomable-image {
+         cursor: zoom-in;
+      }
+
+         .zoomable-image.zoomed {
+            cursor: zoom-out;
+            z-index: 100;
+            position: relative;
+         }
+
+      .image-backdrop.zoomed {
+         position: fixed;
+         top: 0;
+         right: 0;
+         left: 0;
+         bottom: 0;
+         z-index: 50;
+         background-color: rgba(255, 255, 255, 0.95);
+      }
+
+      figcaption {
+         padding: 8px; /* Matches default page margin for Chrome/Edge */
+      }
+   </style>
+
+   <figure>
+      <picture>
+         <img class="zoomable-image" loading="auto" />
+      </picture>
+      <figcaption>
+         <header></header>
+         <footer><a></a></footer>
+      </figcaption>
+   </figure>
+   <div class="image-backdrop"></div>
+</template>
+
+<script src="URI-1.19.2.js"></script>
+<script src="dialog-polyfill.js"></script>
+<script>
+   customElements.define('img-figure',
+      class extends HTMLElement {
+         constructor() {
+            super();
+            let shadow = this.attachShadow({ mode: 'open' })
+            let template = document.querySelector('#img-figure')
+            shadow.appendChild(template.content.cloneNode(true))
+         }
+
+         connectedCallback() {
+            setTimeout(() => {
+               const shadow = this.shadowRoot
+
+               // Set the image source, alternate text, and caption
+               shadow.querySelector('img').setAttribute('src', this.getAttribute('src'))
+               shadow.querySelector('img').setAttribute('alt', fileName(this.getAttribute('src')).prettyFileName())
+               shadow.querySelector('figcaption header').innerHTML = this.innerHTML
+
+               // If there's a link, the author's name gets linked; if not, just put the author's name
+               if (this.getAttribute('link')) {
+                  console.log(shadow)
+                  shadow.querySelector('a').setAttribute('href', this.getAttribute('link'))
+                  shadow.querySelector('a').innerHTML = this.getAttribute('author')
+               } else {
+                  shadow.querySelector('footer').innerHTML = this.getAttribute('author')
+               }
+
+               if (this.getAttribute('modal') == 'false') {
+                  // Remove modal dialogue TODO
+               } else {
+                  shadow.querySelector('picture img').addEventListener('click', function (e) {
+                     let div = shadow.querySelector('div.image-backdrop')
+                     zoomUnzoomImage(e.target, div)
+                  })
+               }
+            })
+         }
+      }
+   )
+
+   function zoomUnzoomImage(img, div) {
+      if (img.classList.contains('zoomed')) {
+         img.classList.remove('zoomed')
+         img.style.transform = ''
+         div.classList.remove('zoomed')
+      } else {
+         let imageCordinates = img.getBoundingClientRect()
+
+         let imageScale = 0
+         if (window.innerHeight > window.innerWidth) {
+            imageScale = window.innerWidth / imageCordinates.width
+         }
+         else {
+            imageScale = window.innerHeight / imageCordinates.height
+         }
+
+         let imageX = ((imageCordinates.left + (imageCordinates.width) / 2))
+         let imageY = ((imageCordinates.top + (imageCordinates.height) / 2))
+
+         let bodyX = (window.innerWidth) / 2
+         let bodyY = (window.innerHeight) / 2
+
+
+         let xOffset = (bodyX - imageX) / (imageScale)
+         let yOffset = (bodyY - imageY) / (imageScale)
+
+         img.style.transform = "scale(" + imageScale + ") translate(" + xOffset + "px," + yOffset + "px) "
+         img.classList.add('zoomed')
+         div.classList.add('zoomed')
+         registersZoomOutListeners(img, div)
+      }
+   }
+
+   let listenersRegistered = false
+
+   function registersZoomOutListeners(img, div) {
+      if (listenersRegistered === false) {
+         // zoom out on scroll
+         document.addEventListener('scroll', () => {
+            if (img.classList.contains('zoomed'))
+               zoomUnzoomImage(img, div)
+         })
+         // zoom out on escape
+         document.addEventListener('keyup', (e) => {
+            if (e.key === 'Escape' && img.classList.contains('zoomed'))
+               zoomUnzoomImage(img, div)
+         })
+         // zoom out on clicking the backdrop
+         div.addEventListener('click', () => {
+            if (img.classList.contains('zoomed'))
+               zoomUnzoomImage(img, div)
+         })
+
+         listenersRegistered = true
+      }
+   }
+
+   // Find the file name of a document from its URL
+   function fileName(url) {
+      if (url === null || typeof url === 'undefined')
+         return ''
+      let file = new URI(url).filename() // File name with file extension
+      return file.substring(0, file.lastIndexOf('.')) // Remove the extension
+   }
+
+   // Replace underscores and dots in a file name with space characters, and capitalize
+   String.prototype.prettyFileName = function () {
+      return this.split(/[._-]/).join(' ').capitalize()
+   }
+
+   String.prototype.capitalize = function () {
+      return this.charAt(0).toUpperCase() + this.slice(1)
+   }
+</script>
