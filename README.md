@@ -1,5 +1,5 @@
 # OrangeTwenty Default Shorthand Web Components
-Tired of typing multiple lines of HTML and Javascript to do the same common things over and over? These web components have the following advantages:
+Tired of typing multiple lines of HTML and Javascript to do the same common things? These web components have the following advantages:
 
 - Shorthand definition of otherwise long-winded markup (like figures, images, and attribution)
 - Automatically semantic, [schema](https://schema.org/)-compliant HTML
