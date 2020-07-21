@@ -1,5 +1,9 @@
 <!doctype html>
 <html>
+<head>
+   <script src="common/require-2.3.6.js"></script>
+   <script src="mark-down/mark-down.js"></script>
+</head>
 <body>
    <mark-down>
 # Our Markdown
@@ -22,24 +26,6 @@ These contents are not the same as the first
                link="http://denislabrecque.ca">
       These contents are the caption that will live <i>inside</i> the element.
    </img-figure>
-
-
-   <!-- Converts markdown to HTML -->
-   <script src="showdown-2.0.0.js"></script>
-   <script>
-      customElements.define('mark-down',
-         class extends HTMLElement {
-            connectedCallback() {
-               setTimeout(() => {
-                  let markdown = this.innerHTML
-                  let converter = new showdown.Converter()
-                  let html = converter.makeHtml(markdown)
-                  this.innerHTML = html
-               })
-            }
-         }
-      )
-   </script>
 
 
 
