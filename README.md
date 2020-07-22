@@ -1,4 +1,4 @@
-# OrangeTwenty Default Shorthand Web Components
+# Orange20 Default Shorthand Web Components
 Tired of typing multiple lines of HTML and Javascript to do the same common things? These web components have the following advantages:
 
 - Shorthand definition of otherwise long-winded markup (like figures, images, and attribution)
@@ -102,6 +102,7 @@ As this project is currently under development, there are ideas I'm eyeing but h
 - A [scroll spy](https://www.w3schools.com/bootstrap/bootstrap_ref_js_scrollspy.asp) that automatically links to article headers
 - Typographical paragraphs that automatically recognize markdown, m-dashes, quotation marks, and prevent orphan words.
 - List items that automatically become a responsive navigation menu.
+- A listview
 - Default citation (something with quick parameters for adding the author and source to the bottom of the page, and automatically expands a reference list)
 - Default quote (something with quick parameters for adding author and source)
 - An auto-hide menu (with customizable animation)
