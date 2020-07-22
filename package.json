@@ -1,0 +1,22 @@
+{
+  "name": "web-components",
+  "version": "1.0.0",
+  "description": "Smart HTML defaults",
+  "main": "tester.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DenisLabrecque/Web-Components.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DenisLabrecque/Web-Components/issues"
+  },
+  "homepage": "https://github.com/DenisLabrecque/Web-Components#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2"
+  }
+}

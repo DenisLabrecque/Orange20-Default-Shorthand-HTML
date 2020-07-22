@@ -21,7 +21,7 @@ customElements.define('h-title',
 
                   template.content.querySelector('h1').innerHTML = title
                   template.content.querySelector('p.subtitle').innerHTML = subtitle
-                  template.content.querySelector('span.emphasis').innerHTML = content
+                  template.content.querySelector('div.emphasis').innerHTML = content
 
                   shadow.appendChild(template.content.cloneNode(true))
                })
