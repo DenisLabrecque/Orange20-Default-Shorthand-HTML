@@ -8,91 +8,23 @@ Tired of typing multiple lines of HTML and Javascript to do the same common thin
 
 This is currently a work in progress for my education and personal website revamp. The goal is that when a component's Javascript is linked, the self-contained component can be used without recourse to extra HTML, CSS, Javascript, or constructor functions. The functionality offered should be an uncomplicated, straightforward, try-it-once-and-get-it element that drops into an existing website unobtrusively.
 
-## `<mark-down>`
-*Represents contents that need to be expanded from markdown syntax to HTML. Uses the [Showdown](https://github.com/showdownjs/showdown) converter.*
-
+## Examples
+Tired of typing extra HTML? Want to use Markdown, but don't want to use a bunch of classes, setup, and Javascript initializers to accomplish this? Simply import the `mark-down` element using a script tag, and write markdown wherever you want on the page:
 ```
-   <mark-down>
-      ...
-   </mark-down>
-```
-
-Content within the tags will be rendered as markdown. *Careful: if your code editor automatically formats text inside elements, the extra spacing will cause the markdown to display as plain text.* This tag can be combined inside other tags.
-
-## `<img-figure>`
-*A zoomable image with simplified declaration that is described by an optional caption and attribution.*
-
-```
-   <img-figure src="..."
-               title="..."
-               author="..."
-               link="...">
-      ...
-   </img-figure>
+<mark-down>
+# Hello Markdown!
+Fabulous paragraph below.
+</mark-down>
 ```
 
-Expands to the following markup:
-
+Expands to this automatically:
 ```
-  <figure>
-     <picture>
-        <img src="{{ src }}" alt="{{ extracted from file name }}" loading="auto" />
-     </picture>
-     <figcaption>
-        <header>{{ title }}</header>
-        {{ tag contents }}
-        <footer>
-           <a href="{{ link }}">{{ author }}</a>
-        </footer>
-     </figcaption>
-   </figure>
+<h1>Hello Markdown!</h1>
+<p>Fabulous paragraph below.</p>
 ```
 
-*`src`*
-
-The image source URL. Plans in the future to auto-detect thumbnail and full-size alternatives through a common naming convention, allowing only the large image to be specified. To be determined.
-
-*`title`*
-
-Title of the image or work. Will be omitted if left blank.
-
-*`author`*
-
-Name of the person or organization who created the image.
-
-*`link`*
-
-URL to the image's source or author. Will wrap the `author` if included.
-
-*type* [static, smooth, link]
-
-Idea to include different styles of image zooming/linking.
-
-*licence*
-
-Idea to link different types of creative commons and other licenses.
-
-## `<h-title>`
-*Page title, subtitle, and emphasized content.*
-
-```
-   <h-title title="..."
-            subtitle="...">
-      ...
-   </h-title>
-```
-
-Expands to the following markup:
-
-```
-   <header>
-      <h1>{{ title }}</h1>
-      <p class="subtitle">{{ subtitle }}</p>
-      <div class="emphasis">{{ element contents }}</div>
-   </header>
-```
-
-If any property is left blank, its respective element will be removed.
+## How to Use
+Go to the folder `dist/` and grab its contents. Then, in your HTML, use the `<script>` tag to import the element; for example, `<script src="elements/h-title.js"></script>`. You will then be able to use that tag.
 
 ## Wishlist
 As this project is currently under development, there are ideas I'm eyeing but haven't gotten to (and possibly never will).
