@@ -26,6 +26,9 @@ Expands to this automatically:
 ## How to Use
 Go to the folder `dist/` and grab its contents. Then, in your HTML, use the `<script>` tag to import the element; for example, `<script src="elements/h-title.js"></script>`. You will then be able to use that tag.
 
+## Documentation
+For a list of elements and how to use them, please [head over to the Wiki](https://github.com/DenisLabrecque/Orange20-Default-Shorthand-HTML/wiki).
+
 ## Wishlist
 As this project is currently under development, there are ideas I'm eyeing but haven't gotten to (and possibly never will).
 
