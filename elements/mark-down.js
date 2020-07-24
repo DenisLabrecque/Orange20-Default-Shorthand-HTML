@@ -4,12 +4,18 @@ customElements.define('mark-down',
          setTimeout(() => {
             let markdown = this.innerHTML
             let contents = this
-            //fetch('common/showdown-2.0.0.js').then(() => {
-            //   let converter = new showdown.Converter()
-            //   let html = converter.makeHtml(markdown)
-            //   contents.innerHTML = html
-            //})
-            require(['common/showdown-2.0.0'], (showdown) => {
+
+            console.log(window.location)
+
+            const scriptPromise = new Promise((resolve, reject) => {
+               const script = document.createElement('script')
+               document.body.appendChild(script)
+               script.onload = resolve
+               script.onerror = reject
+               script.async = true
+               script.src = 'elements/common/showdown-2.0.0.js'
+            });
+            scriptPromise.then(() => {
                let converter = new showdown.Converter()
                let html = converter.makeHtml(markdown)
                contents.innerHTML = html

@@ -1,9 +1,48 @@
 <!doctype html>
 <html>
 <head>
-   <script src="common/require-2.3.6.js"></script>
    <script src="elements/mark-down.js"></script>
    <script src="elements/h-title.js"></script>
+   <script>
+      const imageSizes = {
+         'tiny': 160,
+         'small': 320,
+         'medium': 720,
+         'large': 1920,
+         'x-large': 2400,
+         'original': 3000
+      }
+      const extensions = ['png', 'jpg']
+
+
+      //findImages("file")
+
+      // File should have the name, but no size notation or extension
+      // If multiple extensions exist, behaviour is undefined
+      function findImages(name) {
+         // Search for all possible files
+         let possibleFiles = []
+         extensions.forEach(ext => {
+            for (var key in imageSizes) {
+               let file = name + '-(' + key + ').' + ext;
+               fileExists(file)
+            }
+         })
+      }
+
+      function fileExists(path) {
+         fetch(path)
+            .then(response => {
+               if (response.ok) {
+                  console.log('image found: ' + path)
+                  return true;
+               }
+            })
+            .catch(error => {
+               return false;
+            })
+      }
+   </script>
 </head>
 <body>
    <h-title title="The Value of This Title is Something Very Interesting and Catchy"
