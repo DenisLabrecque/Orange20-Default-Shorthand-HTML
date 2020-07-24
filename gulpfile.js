@@ -6,48 +6,35 @@ import browserSync from 'browser-sync'
 
 const server = browserSync.create();
 
-const paths = {
-   
-   scripts: {
-      src: 'elements/*.js',
-      dest: 'dist/elements/',
-      common: 'elements/common/*.js'
-   },
-   html: {
-      src: 'elements/*.html',
-      tester: 'tester.html',
-      dest: 'dist/elements/'
-   }
-};
-
 const source = {
-   elements: ['elements/*.js', 'elements/*.html'],
+   js: 'elements/*.js',
+   html: 'elements/*.html',
    common: 'elements/common/*.js'
 }
 const dest = {
-   elements: 'dist/elements',
-   common: 'dist/elements/common'
+   elements: 'dist/elements/',
+   common: 'dist/elements/common/'
 }
 
 const clean = () => del(['dist']);
 
 function scripts() {
-   return gulp.src(paths.scripts.src, { sourcemaps: true })
+   return gulp.src(source.js, { sourcemaps: true })
       .pipe(babel())
       .pipe(minify())
-      .pipe(gulp.dest(paths.scripts.dest))
+      .pipe(gulp.dest(dest.elements))
 }
 
 function commonScripts() {
-   return gulp.src('elements/common/*.js', { sourcemaps: true })
+   return gulp.src(source.common, { sourcemaps: true })
       .pipe(babel())
       .pipe(minify())
-      .pipe(gulp.dest('dist/elements/common/'))
+      .pipe(gulp.dest(dest.common))
 }
 
 function html() {
-   return gulp.src(paths.html.src)
-      .pipe(gulp.dest(paths.scripts.dest))
+   return gulp.src(source.html)
+      .pipe(gulp.dest(dest.elements))
 }
 
 function reload(done) {
@@ -64,7 +51,7 @@ function serve(done) {
    done();
 }
 
-const watch = () => gulp.watch([paths.scripts.src, paths.scripts.common, paths.html.src, 'tester.html', 'index.html'], gulp.series(scripts, reload));
+const watch = () => gulp.watch([source.js, source.html, source.common, 'tester.html', 'index.html'], gulp.series(reload));
 
 const dev = gulp.series(clean, html, scripts, commonScripts, serve, watch);
 export default dev;
