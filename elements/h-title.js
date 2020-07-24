@@ -19,15 +19,26 @@ class hTitle extends HTMLElement {
                let parsed = parser.parseFromString(data, 'text/html')
                let template = parsed.querySelector('template')
 
+               // Title (required)
                let h1 = template.content.querySelector('h1')
-               console.log(titleType(level))
                let titleElement = titleType(level)
                titleElement.innerHTML = title
                h1.replaceWith(titleElement)
 
-               template.content.querySelector('p.subtitle').innerHTML = subtitle
-               template.content.querySelector('div.emphasis').innerHTML = content
+               // Subtitle (optional)
+               if (subtitle === null)
+                  template.content.querySelector('p.subtitle').remove()
+               else
+                  template.content.querySelector('p.subtitle').innerHTML = subtitle
+               
 
+               // Content (optional)
+               console.log(content)
+               if (content.length === 0)
+                  template.content.querySelector('div.emphasis').remove()
+               else
+                  template.content.querySelector('div.emphasis').innerHTML = content
+                  
                shadow.appendChild(template.content.cloneNode(true))
             })
       })
