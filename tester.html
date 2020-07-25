@@ -3,6 +3,7 @@
 <head>
    <script src="elements/mark-down.js"></script>
    <script src="elements/h-title.js"></script>
+   <script src="elements/img-figure.js"></script>
    <script>
       const imageSizes = {
          'tiny': 160,
@@ -59,164 +60,13 @@ These contents should get converted
 * Three
    </mark-down>
 
-   <mark-down>
-## Also Markdown
-
-These contents are not the same as the first
-   </mark-down>
-
    <img-figure src="https://c.pxhere.com/images/12/30/5e283733ff3cd2bd18d7cc13f40a-1435525.jpg!d"
+               title="Title"
                author="Name of Person"
-               link="http://denislabrecque.ca">
+               link="http://denislabrecque.ca"
+               license="CC by SA">
       These contents are the caption that will live <i>inside</i> the element.
    </img-figure>
-
-
-
-
-
-   <style>
-      figure {
-         margin: 0 0 0 0;
-         display: block;
-         /* Stays same width as image contents */
-         background-color: whitesmoke;
-      }
-
-      img {
-         max-width: 100%;
-         /* Images should fit within their container by default */
-         height: auto;
-         background-color: lightgrey;
-         margin: auto;
-         transition: transform 0.3s;
-      }
-
-      .zoomable-image {
-         cursor: zoom-in;
-      }
-
-         .zoomable-image.zoomed {
-            cursor: zoom-out;
-            z-index: 100;
-            position: relative;
-         }
-
-      .image-backdrop.zoomed {
-         position: fixed;
-         top: 0;
-         right: 0;
-         left: 0;
-         bottom: 0;
-         z-index: 50;
-         background-color: rgba(255, 255, 255, 0.95);
-      }
-   </style>
-
-   <figure>
-      <picture>
-         <img class="zoomable-image" src="https://c.pxhere.com/images/12/30/5e283733ff3cd2bd18d7cc13f40a-1435525.jpg!d" loading="auto" />
-      </picture>
-      <figcaption>
-         <header>Title</header>
-         <footer>Description</footer>
-      </figcaption>
-   </figure>
-
-   <div class="image-backdrop"></div>
-
-   <script>
-      function zoomUnzoomImage() {
-         console.log(this)
-         if (this.classList.contains('zoomed')) {
-            this.classList.remove('zoomed')
-            this.style.transform = ""
-            document.querySelector('.image-backdrop').classList.remove('zoomed')
-            removeZoomOutListeners()
-         } else {
-
-            var imageCordinates = this.getBoundingClientRect()
-
-            var imageScale = 0
-            if (window.innerHeight > window.innerWidth) {
-               imageScale = window.innerWidth / imageCordinates.width
-            }
-            else {
-               imageScale = window.innerHeight / imageCordinates.height
-            }
-
-            let imageX = ((imageCordinates.left + (imageCordinates.width) / 2))
-            let imageY = ((imageCordinates.top + (imageCordinates.height) / 2))
-
-            let bodyX = (window.innerWidth) / 2
-            let bodyY = (window.innerHeight) / 2
-
-
-            let xOffset = (bodyX - imageX) / (imageScale)
-            let yOffset = (bodyY - imageY) / (imageScale)
-
-            this.style.transform = "scale(" + imageScale + ") translate(" + xOffset + "px," + yOffset + "px) "
-            this.classList.add('zoomed')
-            document.querySelector('.image-backdrop').classList.add('zoomed')
-            registersZoomOutListeners()
-         }
-      }
-
-
-      document.addEventListener('click', function (event) {
-         if (event && event.target && event.target.className.includes('zoomable-image')) {
-            zoomUnzoomImage.call(event.target)
-         }
-      });
-
-
-      function registersZoomOutListeners() {
-         // zoom out on scroll
-         document.addEventListener('scroll', scrollZoomOut)
-         // zoom out on escape
-         document.addEventListener('keyup', escapeClickZoomOut)
-         // zoom out on clicking the backdrop
-         document.querySelector('.image-backdrop').addEventListener('click', backDropClickZoomOut)
-      }
-
-      function removeZoomOutListeners() {
-         document.removeEventListener('scroll', scrollZoomOut)
-         document.removeEventListener('keyup', escapeClickZoomOut)
-         document.querySelector('.image-backdrop').removeEventListener('click', backDropClickZoomOut)
-      }
-
-      function scrollZoomOut() {
-         if (document.querySelector('.zoomable-image.zoomed')) {
-            zoomUnzoomImage.call(document.querySelector('.zoomable-image.zoomed'))
-         }
-      }
-
-      function backDropClickZoomOut() {
-         if (document.querySelector('.zoomable-image.zoomed')) {
-            zoomUnzoomImage.call(document.querySelector('.zoomable-image.zoomed'))
-         }
-      }
-
-      function escapeClickZoomOut(event) {
-         if (event.key === "Escape" && document.querySelector('.zoomable-image.zoomed')) {
-            zoomUnzoomImage.call(document.querySelector('.zoomable-image.zoomed'))
-         }
-      }
-   </script>
-
-<mark-down>
-## This is the value
-
-useless sentence
-
-another useless paragraph
-
-- list
-- to
-- take
-- up
-- space
-</mark-down>
 
 </body>
 </html>

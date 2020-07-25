@@ -31,9 +31,7 @@ class hTitle extends HTMLElement {
                else
                   template.content.querySelector('p.subtitle').innerHTML = subtitle
                
-
                // Content (optional)
-               console.log(content)
                if (content.length === 0)
                   template.content.querySelector('div.emphasis').remove()
                else
