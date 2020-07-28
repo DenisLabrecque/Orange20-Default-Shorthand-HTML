@@ -1,10 +1,3 @@
-<img-figure src="https://c.pxhere.com/images/12/30/5e283733ff3cd2bd18d7cc13f40a-1435525.jpg!d"
-            author="Name of Person"
-            link="http://denislabrecque.ca">
-   Attempting to make the best <i>image-figure</i> possible.
-</img-figure>
-
-
 <!-- IMAGE FIGURE
    @src = the URL to the image
    @author = plain-text name of the person who took the photo
@@ -13,7 +6,6 @@
    -->
 <!-- Passes an image's information and automatically populates the ALT tag and figure -->
 <template id="img-figure">
-   <link rel="stylesheet" href="dialog-polyfill.css" />
    <style>
       figure {
          margin: 0 0 0 0;
@@ -60,13 +52,18 @@
       </picture>
       <figcaption>
          <header></header>
-         <footer><a></a></footer>
+         <div class="caption"></div>
+         <footer>
+            <a class="author"></a>
+            <a class="source"></a>
+            <a class="license"></a>
+         </footer>
       </figcaption>
    </figure>
    <div class="image-backdrop"></div>
 </template>
 
-<script src="URI-1.19.2.js"></script>
+<!--<script src="URI-1.19.2.js"></script>
 <script src="dialog-polyfill.js"></script>
 <script>
    customElements.define('img-figure',
@@ -182,4 +179,4 @@
    String.prototype.capitalize = function () {
       return this.charAt(0).toUpperCase() + this.slice(1)
    }
-</script>
+</script>-->
